@@ -1,0 +1,9 @@
+@{ ViewData["Title"] = "Upload Log File"; }
+
+<h1>Upload Log File</h1>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <label>Log File</label>
+    <input type="file" name="logFile" required />
+    <button type="submit">Upload</button>
+</form>
+<a class="btn-link" asp-action="Index">Back to list</a>

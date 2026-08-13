@@ -1,0 +1,39 @@
+@model List<ProductEntity>
+@{
+    ViewData["Title"] = "Products";
+    var imageUrls = ViewBag.ImageUrls as Dictionary<string, string>;
+}
+
+<h1>Products (Azure Table Storage + Blob Storage for images)</h1>
+<a class="btn" asp-action="Create">+ Add Product</a>
+
+<table>
+    <thead>
+        <tr><th>Image</th><th>Name</th><th>Description</th><th>Price</th><th>Stock</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>
+                @if (imageUrls != null && imageUrls.ContainsKey(p.RowKey))
+                {
+                    <img class="thumb" src="@imageUrls[p.RowKey]" alt="@p.ProductName" />
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+            <td>@p.ProductName</td>
+            <td>@p.Description</td>
+            <td>@p.Price.ToString("C")</td>
+            <td>@p.StockQuantity</td>
+            <td>
+                <a class="btn-link" asp-action="Delete" asp-route-partitionKey="@p.PartitionKey" asp-route-rowKey="@p.RowKey"
+                   onclick="return confirm('Delete this product?');">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

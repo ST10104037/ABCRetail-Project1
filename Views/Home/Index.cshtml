@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Console";
+}
+<h1>Fulfillment Console</h1>
+<p>Customer records, product images, order/inventory messaging, and system logs — backed by Azure Table, Blob, Queue, and File storage.</p>
+
+<ul class="module-grid">
+    <li>
+        <a class="module-card" asp-controller="Customer" asp-action="Index">
+            <span class="tag">Table Storage</span>
+            <h2>Customers</h2>
+            <p>Customer profiles — names, contact details, shipping addresses.</p>
+        </a>
+    </li>
+    <li>
+        <a class="module-card" asp-controller="Product" asp-action="Index">
+            <span class="tag">Table + Blob Storage</span>
+            <h2>Products</h2>
+            <p>Product catalog with images hosted in blob storage.</p>
+        </a>
+    </li>
+    <li>
+        <a class="module-card" asp-controller="Order" asp-action="Index">
+            <span class="tag">Queue Storage</span>
+            <h2>Order Queue</h2>
+            <p>Order and inventory processing messages, first in first out.</p>
+        </a>
+    </li>
+    <li>
+        <a class="module-card" asp-controller="LogFiles" asp-action="Index">
+            <span class="tag">File Storage</span>
+            <h2>Log Files</h2>
+            <p>System log files, uploaded and retrievable by name.</p>
+        </a>
+    </li>
+</ul>

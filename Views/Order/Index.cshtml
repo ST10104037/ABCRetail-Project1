@@ -1,0 +1,22 @@
+@model List<Azure.Storage.Queues.Models.PeekedMessage>
+@{ ViewData["Title"] = "Order Queue"; }
+
+<h1>Order / Inventory Processing Queue (Azure Queue Storage)</h1>
+<a class="btn" asp-action="Create">+ Add Message</a>
+<form asp-action="ProcessNext" method="post" style="display:inline;">
+    <button type="submit" class="btn">Process Next Message</button>
+</form>
+
+<table>
+    <thead><tr><th>Message ID</th><th>Content</th><th>Inserted</th></tr></thead>
+    <tbody>
+    @foreach (var m in Model)
+    {
+        <tr>
+            <td>@m.MessageId</td>
+            <td>@m.MessageText</td>
+            <td>@m.InsertedOn</td>
+        </tr>
+    }
+    </tbody>
+</table>

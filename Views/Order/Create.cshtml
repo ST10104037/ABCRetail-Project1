@@ -1,0 +1,9 @@
+@{ ViewData["Title"] = "Add Queue Message"; }
+
+<h1>Add Order / Inventory Message</h1>
+<form asp-action="Create" method="post">
+    <label>Message text</label>
+    <input type="text" name="messageText" placeholder="e.g. Processing order #1023 - imageName: shoe123.jpg" required />
+    <button type="submit">Send to Queue</button>
+</form>
+<a class="btn-link" asp-action="Index">Back to queue</a>

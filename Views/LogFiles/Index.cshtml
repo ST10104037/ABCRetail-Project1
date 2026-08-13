@@ -1,0 +1,18 @@
+@model List<string>
+@{ ViewData["Title"] = "Log Files"; }
+
+<h1>Log Files (Azure File Storage)</h1>
+<a class="btn" asp-action="Create">+ Upload Log File</a>
+
+<table>
+    <thead><tr><th>File Name</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var f in Model)
+    {
+        <tr>
+            <td>@f</td>
+            <td><a class="btn-link" asp-action="Download" asp-route-fileName="@f">Download</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

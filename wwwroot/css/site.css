@@ -1,0 +1,407 @@
+/* ============================================================
+   ABC Retail — Fulfillment Console
+   Design language: warehouse manifest / shipping-label system.
+   Kraft paper surfaces, stamped ink headers, barcode-stripe accents,
+   monospace for anything that reads like data (IDs, prices, queue text).
+   ============================================================ */
+
+:root {
+    --paper: #ece2cd;
+    --paper-light: #f6f1e4;
+    --card: #fffdf8;
+    --ink: #20242b;
+    --ink-soft: #5b5a4f;
+    --line: #c9bfa3;
+    --line-strong: #a89a72;
+    --stamp: #c1440e;
+    --stamp-dark: #9c3609;
+    --teal: #1f6f78;
+    --green: #3f7d45;
+    --radius: 3px;
+    --font-display: "Oswald", "Arial Narrow", sans-serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", "Consolas", monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    background: linear-gradient(180deg, var(--paper-light), var(--paper) 220px, var(--paper));
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+}
+
+/* ---------- Barcode stripe: the recurring signature motif ---------- */
+.barcode {
+    height: 10px;
+    background-image: repeating-linear-gradient( 90deg, var(--ink) 0px, var(--ink) 2px, transparent 2px, transparent 4px, var(--ink) 4px, var(--ink) 5px, transparent 5px, transparent 9px, var(--ink) 9px, var(--ink) 12px, transparent 12px, transparent 14px );
+    opacity: 0.85;
+}
+
+/* ---------- Top manifest bar ---------- */
+.navbar {
+    background: var(--ink);
+    padding: 0;
+    display: block;
+}
+
+.navbar-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.navbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+    .navbar .brand .stamp-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: 2px solid var(--stamp);
+        border-radius: 50%;
+        color: var(--stamp);
+        font-size: 0.75rem;
+        font-weight: 700;
+        transform: rotate(-8deg);
+        flex-shrink: 0;
+    }
+
+.navbar .nav-links {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+    .navbar .nav-links a {
+        color: #d9d5c8;
+        text-decoration: none;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        padding: 8px 12px;
+        border-radius: var(--radius);
+        border: 1px solid transparent;
+        transition: border-color .15s ease, color .15s ease, background .15s ease;
+    }
+
+        .navbar .nav-links a:hover {
+            color: #fff;
+            border-color: #4a5058;
+            background: rgba(255,255,255,0.04);
+        }
+
+/* ---------- Page shell ---------- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 36px 24px 60px;
+}
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--stamp);
+    border: 1px solid var(--stamp);
+    padding: 3px 9px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    background: rgba(193, 68, 14, 0.06);
+}
+
+h1 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 2rem;
+    margin: 0 0 6px;
+    color: var(--ink);
+}
+
+    h1 + p {
+        color: var(--ink-soft);
+        margin-top: 0;
+    }
+
+/* ---------- Buttons ---------- */
+button, .btn {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: #fff;
+    border: 1px solid var(--ink);
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s ease, transform .1s ease;
+}
+
+    button:hover, .btn:hover {
+        background: var(--stamp);
+        border-color: var(--stamp);
+    }
+
+    button:active, .btn:active {
+        transform: translateY(1px);
+    }
+
+.btn-link {
+    color: var(--teal);
+    margin-right: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--teal);
+}
+
+    .btn-link:hover {
+        color: var(--stamp-dark);
+        border-color: var(--stamp-dark);
+    }
+
+/* ---------- Tables (packing-list style) ---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
+
+th {
+    background: var(--ink);
+    color: #efe9d8;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 11px 14px;
+}
+
+td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    vertical-align: middle;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:nth-child(even) {
+    background: #faf6ec;
+}
+
+tbody tr:hover {
+    background: #f1e9d3;
+}
+
+td:has(> img.thumb) {
+    width: 90px;
+}
+
+/* ---------- Forms (shipping-label card) ---------- */
+form {
+    background: var(--card);
+    padding: 26px 26px 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    max-width: 520px;
+    position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
+
+    form::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background-image: repeating-linear-gradient( 90deg, var(--ink) 0 2px, transparent 2px 5px, var(--ink) 5px 6px, transparent 6px 10px );
+    }
+
+label {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 9px 10px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: var(--ink);
+}
+
+    input[type="file"] {
+        border: 1px dashed var(--line-strong);
+        padding: 12px 10px;
+        background: #faf7ee;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: var(--teal);
+        box-shadow: 0 0 0 3px rgba(31, 111, 120, 0.12);
+    }
+
+form button {
+    margin-top: 20px;
+}
+
+/* ---------- Misc content elements ---------- */
+img.thumb {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    display: block;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+a {
+    color: var(--teal);
+}
+
+/* Home landing: module cards */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+    list-style: none;
+    padding: 0;
+}
+
+.module-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-decoration: none;
+    color: var(--ink);
+    display: block;
+    transition: border-color .15s ease, transform .12s ease;
+}
+
+    .module-card:hover {
+        border-color: var(--stamp);
+        transform: translateY(-2px);
+    }
+
+    .module-card .tag {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--stamp);
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .module-card h2 {
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        font-size: 1.15rem;
+        margin: 0 0 6px;
+        letter-spacing: 0.01em;
+    }
+
+    .module-card p {
+        margin: 0;
+        color: var(--ink-soft);
+        font-size: 0.88rem;
+    }
+
+/* Data-flavoured text (ids, prices, queue payloads) */
+.data, td:nth-child(1) code, code {
+    font-family: var(--font-mono);
+}
+
+footer.site-footer {
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+    padding: 18px 24px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+    .navbar-inner {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead {
+        display: none;
+    }
+
+    td {
+        border: none;
+        padding: 6px 4px;
+    }
+
+    tr {
+        border-bottom: 1px solid var(--line);
+        padding: 10px 0;
+    }
+}

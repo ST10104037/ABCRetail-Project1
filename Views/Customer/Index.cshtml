@@ -1,0 +1,26 @@
+@model List<CustomerProfileEntity>
+@{ ViewData["Title"] = "Customers"; }
+
+<h1>Customer Profiles (Azure Table Storage)</h1>
+<a class="btn" asp-action="Create">+ Add Customer</a>
+
+<table>
+    <thead>
+        <tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Address</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.FullName</td>
+            <td>@c.Email</td>
+            <td>@c.PhoneNumber</td>
+            <td>@c.ShippingAddress</td>
+            <td>
+                <a class="btn-link" asp-action="Delete" asp-route-partitionKey="@c.PartitionKey" asp-route-rowKey="@c.RowKey"
+                   onclick="return confirm('Delete this customer?');">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
